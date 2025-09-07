@@ -1,8 +1,7 @@
 // === JOUW DATA ===
 // Let op: staan je foto's in een mapje (bv. 'fotos/')? Zet dan het pad voor elk item.
 const IMAGES = [
-  "WhatsApp Image 2025-09-07 at 13.40.38.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.03.jpeg",
+
   "WhatsApp Image 2025-09-07 at 13.51.06 (1).jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.06.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.08.jpeg",
@@ -32,6 +31,8 @@ const IMAGES = [
   "WhatsApp Image 2025-09-07 at 13.52.26 (1).jpeg",
   "WhatsApp Image 2025-09-07 at 13.52.26 (2).jpeg",
   "WhatsApp Image 2025-09-07 at 13.52.26.jpeg"
+   "WhatsApp Image 2025-09-07 at 13.40.38.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.03.jpeg",
 ];
 
 const VIDEO_URL = ""; // bv. 'https://www.youtube.com/embed/xxxxxxxx'
