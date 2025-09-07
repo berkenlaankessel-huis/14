@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Halfopen gezinswoning – Kessel</title>
+  <meta name="description" content="Charmante halfopen gezinswoning met veel lichtinval in Kessel. Kijkdag op zaterdag 27 september 2025. Biedingen onder gesloten omslag."/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<header class="header">
+  <div class="inner container">
+    <div class="brand">
+      <div class="badge">🏠</div>
+      <div>
+        <div class="hero-title">Kessel (adres op aanvraag)</div>
+        <div class="hero-sub">Te koop · € 485.000</div>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn primary" href="tel:+32400000000">Bel</a>
+      <a class="btn" href="mailto:info@jouwdomein.be">E-mail</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- GALERIJ -->
+  <section>
+    <div class="grid gallery" id="gallery"></div>
+    <div id="gallery-empty" class="placeholder">
+      Voeg foto-URLs toe in <code>scripts.js</code> → <b>IMAGES</b> om de galerij te tonen.
+    </div>
+  </section>
+
+  <!-- INFO + VIDEO -->
+  <section class="row" style="margin-top: 16px;">
+    <div class="card" style="flex:2;">
+      <div class="content">
+        <h2>Beschrijving</h2>
+        <p>
+          Charmante halfopen gezinswoning met veel lichtinval in een kindvriendelijke, rustige straat.
+          Grote raampartijen zorgen overal voor natuurlijk licht. Gelijkvloers: inkomhal met vestiaire en gastentoilet,
+          lichtrijke living met zithoek en eetplaats, functionele keuken en wasplaats. 1e verdieping: drie volwaardige
+          slaapkamers, nachthal, badkamer en apart toilet. Zolder (ca. 30 m²) met potentieel voor extra kamer/hobby/bureau.
+          Buiten: overdekt terras, carport en garage. Dicht bij school, station en invalswegen.
+        </p>
+
+        <div class="notice" style="margin: 12px 0;">
+          <div><b>Kijkdag:</b> Zaterdag 27 september 2025</div>
+          <div>Inschrijven kan enkel via: <a href="https://calendar.app.google/agMt4djXYNQzZm6B8" target="_blank" rel="noreferrer">afspraaklink</a></div>
+          <div><b>Biedingsmethode:</b> Biedingen onder gesloten omslag</div>
+        </div>
+
+        <div class="kv">
+          <div class="kv-item"><div>🏡</div><div><div class="label">Type</div><div class="value">Halfopen bebouwing</div></div></div>
+          <div class="kv-item"><div>🛏️</div><div><div class="label">Slaapkamers</div><div class="value">3</div></div></div>
+          <div class="kv-item"><div>📐</div><div><div class="label">Bew. opp.</div><div class="value">183 m²</div></div></div>
+          <div class="kv-item"><div>📏</div><div><div class="label">Perceel</div><div class="value">463 m²</div></div></div>
+          <div class="kv-item"><div>📍</div><div><div class="label">Ligging</div><div class="value">Rustige straat, kindvriendelijk</div></div></div>
+          <div class="kv-item"><div>⚡</div><div><div class="label">EPC</div><div class="value">B (148 kWh/m²)</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="flex:1;">
+      <div class="content">
+        <h2>Video rondleiding</h2>
+        <div class="video" id="videoWrap">
+          <iframe id="tourFrame" width="100%" height="100%" src="" title="Video rondleiding"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+        </div>
+        <div id="videoEmpty" class="placeholder hide">Nog geen video-link ingevuld. Voeg een YouTube/Vimeo URL toe in <code>scripts.js</code> → <b>VIDEO_URL</b>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <section style="margin-top: 16px;">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="details">Details</button>
+      <button class="tab-btn" data-tab="documenten">Belangrijke documenten</button>
+    </div>
+    <div id="tab-details" class="tab-content">
+      <div class="card"><div class="content prose">
+        <ul>
+          <li>Bouwjaar: 1983</li>
+          <li>Aantal verdiepingen: 3</li>
+          <li>Keuken: hyper uitgerust (18 m²)</li>
+          <li>Kelder en zolder aanwezig (zolder ca. 30 m²)</li>
+          <li>Carport en garage aanwezig</li>
+          <li>Aansluiting riolering: ja – nuts: gas, water, elektriciteit</li>
+        </ul>
+      </div></div>
+    </div>
+    <div id="tab-documenten" class="tab-content hide">
+      <div class="card"><div class="content" id="docsList"></div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="inner container">
+    <div>© <span id="year"></span> Verkoop van Kessel (adres op aanvraag)</div>
+    <div>Disclaimer: Alle informatie onder voorbehoud.</div>
+  </div>
+</footer>
+
+<div id="modal" class="modal"><img id="modalImg" alt="Foto"/></div>
+<script src="scripts.js"></script>
+</body>
+</html>
