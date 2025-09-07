@@ -1,12 +1,37 @@
-// === VUL HIER JOUW DATA IN ===
+// === JOUW DATA ===
+// Let op: staan je foto's in een mapje (bv. 'fotos/')? Zet dan het pad voor elk item.
 const IMAGES = [
-  // Zet hier je bestandsnamen/URLs, vb.:
-  // 'fotos/voorgevel.jpeg',
-  // 'fotos/living.jpeg',
-  // Of als ze naast index.html staan:
   "WhatsApp Image 2025-09-07 at 13.40.38.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.03.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.06 (1).jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.06.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.08.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.09.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.12.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.13 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.13.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.14.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.15.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.16 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.16.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.18.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.21.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.24.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.27.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.29.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.35.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.39.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.40.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.41 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.41.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.42 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.42.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.50.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.51 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.51.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.52.26 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.52.26 (2).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.52.26.jpeg"
 ];
 
 const VIDEO_URL = ""; // bv. 'https://www.youtube.com/embed/xxxxxxxx'
@@ -15,21 +40,19 @@ const DOCUMENTS = [
   // { name: 'EPC Certificaat – B (Ref. 20250906-0003677153-RES-1)', url: 'documents/epc.pdf' },
   // { name: 'Stedenbouwkundige vergunning – ontvangen', url: 'documents/stedenbouw.pdf' },
 ];
-// === EINDE CONFIG ===
+// === EINDE DATA ===
 
 // Footer jaar
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// === Banner/slider i.p.v. galerij ===
+// ---------- Banner i.p.v. grid ----------
 const galleryHost = document.getElementById('gallery');
 const galleryEmpty = document.getElementById('gallery-empty');
 
-if (IMAGES.length === 0) {
-  // geen foto’s → placeholder laten staan
-} else {
-  // vervang de galerij door één banner/slider
+// Maak container met knoppen + dots
+function renderBanner() {
   galleryEmpty.classList.add('hide');
-  galleryHost.className = ''; // reset grid-styling
+  galleryHost.className = ''; // reset grid
   galleryHost.innerHTML = `
     <div class="banner" id="banner">
       <img id="bannerImg" alt="Foto" />
@@ -38,49 +61,64 @@ if (IMAGES.length === 0) {
       <div class="banner-dots" id="bannerDots"></div>
     </div>
   `;
+}
 
+// Preload & filter ongeldige paden
+function preloadAndInit(list) {
+  if (!list || list.length === 0) return; 
+  const valid = [];
+  let done = 0;
+
+  list.forEach(src => {
+    const im = new Image();
+    im.onload = () => { valid.push(src); finish(); };
+    im.onerror = () => { finish(); }; // overslaan als fout
+    im.src = src;
+  });
+
+  function finish() {
+    done++;
+    if (done === list.length) {
+      if (valid.length === 0) return; // niets bruikbaar
+      renderBanner();
+      initSlider(valid);
+    }
+  }
+}
+
+function initSlider(list) {
   const imgEl = document.getElementById('bannerImg');
   const dotsEl = document.getElementById('bannerDots');
+  const nextBtn = document.querySelector('.banner-btn.next');
+  const prevBtn = document.querySelector('.banner-btn.prev');
 
-  let index = 0;
-  const INTERVAL_MS = 4000;   // wisselsnelheid
-  let timer = null;
-
-  // dots maken
-  dotsEl.innerHTML = IMAGES.map((_, i) => `<button class="dot" data-i="${i}" aria-label="Ga naar slide ${i+1}"></button>`).join('');
+  dotsEl.innerHTML = list.map((_, i) => `<button class="dot" data-i="${i}" aria-label="Slide ${i+1}"></button>`).join('');
   const dotButtons = Array.from(dotsEl.querySelectorAll('.dot'));
 
+  let index = 0;
+  const INTERVAL_MS = 4000;
+  let timer = null;
+
   function show(i, instant=false) {
-    index = (i + IMAGES.length) % IMAGES.length;
-    // fade
-    if (!instant) imgEl.classList.add('fade');
-    imgEl.onload = () => imgEl.classList.remove('fade');
-    imgEl.src = IMAGES[index];
+    index = (i + list.length) % list.length;
+    if (!instant) imgEl.classList.add('is-fading');
+    imgEl.onload = () => imgEl.classList.remove('is-fading');
+    imgEl.src = list[index];
     dotButtons.forEach((b, k) => b.classList.toggle('active', k === index));
   }
+  function next(){ show(index + 1); }
+  function prev(){ show(index - 1); }
+  function start(){ timer = setInterval(next, INTERVAL_MS); }
+  function stop(){ clearInterval(timer); timer = null; }
+  function restart(){ stop(); start(); }
 
-  function next() { show(index + 1); }
-  function prev() { show(index - 1); }
-
-  // knoppen
-  document.querySelector('.banner-btn.next').addEventListener('click', () => { next(); restart(); });
-  document.querySelector('.banner-btn.prev').addEventListener('click', () => { prev(); restart(); });
-
-  // dots click
+  nextBtn.addEventListener('click', () => { next(); restart(); });
+  prevBtn.addEventListener('click', () => { prev(); restart(); });
   dotButtons.forEach(b => b.addEventListener('click', (e) => {
     const i = Number(e.currentTarget.getAttribute('data-i'));
     show(i); restart();
   }));
 
-  function start() {
-    timer = setInterval(next, INTERVAL_MS);
-  }
-  function stop() {
-    clearInterval(timer); timer = null;
-  }
-  function restart() { stop(); start(); }
-
-  // pauzeer op hover/touch
   const banner = document.getElementById('banner');
   banner.addEventListener('mouseenter', stop);
   banner.addEventListener('mouseleave', start);
@@ -91,7 +129,13 @@ if (IMAGES.length === 0) {
   start();
 }
 
-// === Video ===
+if (IMAGES.length === 0) {
+  // laat placeholder staan
+} else {
+  preloadAndInit(IMAGES);
+}
+
+// ---------- Video ----------
 const frame = document.getElementById('tourFrame');
 const videoWrap = document.getElementById('videoWrap');
 const videoEmpty = document.getElementById('videoEmpty');
@@ -104,7 +148,7 @@ if (VIDEO_URL) {
   videoEmpty.classList.remove('hide');
 }
 
-// === Tabs ===
+// ---------- Tabs ----------
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -115,7 +159,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
-// === Documenten ===
+// ---------- Documenten ----------
 const docsList = document.getElementById('docsList');
 if (DOCUMENTS.length === 0) {
   docsList.innerHTML = '<div class="placeholder">Nog geen documenten toegevoegd. Voeg items toe in <code>scripts.js</code> → <b>DOCUMENTS</b>.</div>';
