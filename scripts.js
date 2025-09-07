@@ -40,7 +40,8 @@ const IMAGES = [
   "WhatsApp Image 2025-09-07 at 13.51.50.jpeg"
 ];
 
-const VIDEO_URL = ""; // bv. 'https://www.youtube.com/embed/xxxxxxxx'
+const VIDEO_URL = "https://www.youtube.com/embed/yEjpqcgucxA"; // bv. 'https://www.youtube.com/embed/xxxxxxxx'
+
 
 const DOCUMENTS = [
   // { name: 'EPC Certificaat – B (Ref. 20250906-0003677153-RES-1)', url: 'documents/epc.pdf' },
