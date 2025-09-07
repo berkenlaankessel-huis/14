@@ -1,77 +1,97 @@
 // === VUL HIER JOUW DATA IN ===
 const IMAGES = [
+  // Zet hier je bestandsnamen/URLs, vb.:
+  // 'fotos/voorgevel.jpeg',
+  // 'fotos/living.jpeg',
+  // Of als ze naast index.html staan:
   "WhatsApp Image 2025-09-07 at 13.40.38.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.03.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.06 (1).jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.06.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.08.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.09.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.12.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.13 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.13.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.14.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.15.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.16 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.16.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.18.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.21.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.24.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.27.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.29.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.35.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.39.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.40.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.41 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.41.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.42 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.42.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.50.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.51 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.51.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.52.26 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.52.26 (2).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.52.26.jpeg"
 ];
-
 
 const VIDEO_URL = ""; // bv. 'https://www.youtube.com/embed/xxxxxxxx'
 
 const DOCUMENTS = [
   // { name: 'EPC Certificaat – B (Ref. 20250906-0003677153-RES-1)', url: 'documents/epc.pdf' },
   // { name: 'Stedenbouwkundige vergunning – ontvangen', url: 'documents/stedenbouw.pdf' },
-  // { name: 'Kadastrale Gegevens', url: 'documents/kadastraal.pdf' },
-  // { name: 'Elektrische keuring (status: niet gespecificeerd)', url: 'documents/keuring.pdf' },
 ];
 // === EINDE CONFIG ===
 
 // Footer jaar
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Galerij + modal
-const gallery = document.getElementById('gallery');
+// === Banner/slider i.p.v. galerij ===
+const galleryHost = document.getElementById('gallery');
 const galleryEmpty = document.getElementById('gallery-empty');
-function openModal(src){
-  const m = document.getElementById('modal');
-  const img = document.getElementById('modalImg');
-  img.src = src;
-  m.classList.add('open');
-  m.addEventListener('click', () => m.classList.remove('open'), { once: true });
-}
-if (IMAGES.length > 0) {
+
+if (IMAGES.length === 0) {
+  // geen foto’s → placeholder laten staan
+} else {
+  // vervang de galerij door één banner/slider
   galleryEmpty.classList.add('hide');
-  IMAGES.forEach((src, i) => {
-    const wrap = document.createElement('div');
-    wrap.className = 'aspect-4-3';
-    const img = document.createElement('img');
-    img.src = src + (src.includes('unsplash') ? '?auto=format&fit=crop&w=1080&q=80' : '');
-    img.alt = `Foto ${i+1}`;
-    img.addEventListener('click', () => openModal(src));
-    wrap.appendChild(img);
-    gallery.appendChild(wrap);
-  });
+  galleryHost.className = ''; // reset grid-styling
+  galleryHost.innerHTML = `
+    <div class="banner" id="banner">
+      <img id="bannerImg" alt="Foto" />
+      <button class="banner-btn prev" aria-label="Vorige">&#10094;</button>
+      <button class="banner-btn next" aria-label="Volgende">&#10095;</button>
+      <div class="banner-dots" id="bannerDots"></div>
+    </div>
+  `;
+
+  const imgEl = document.getElementById('bannerImg');
+  const dotsEl = document.getElementById('bannerDots');
+
+  let index = 0;
+  const INTERVAL_MS = 4000;   // wisselsnelheid
+  let timer = null;
+
+  // dots maken
+  dotsEl.innerHTML = IMAGES.map((_, i) => `<button class="dot" data-i="${i}" aria-label="Ga naar slide ${i+1}"></button>`).join('');
+  const dotButtons = Array.from(dotsEl.querySelectorAll('.dot'));
+
+  function show(i, instant=false) {
+    index = (i + IMAGES.length) % IMAGES.length;
+    // fade
+    if (!instant) imgEl.classList.add('fade');
+    imgEl.onload = () => imgEl.classList.remove('fade');
+    imgEl.src = IMAGES[index];
+    dotButtons.forEach((b, k) => b.classList.toggle('active', k === index));
+  }
+
+  function next() { show(index + 1); }
+  function prev() { show(index - 1); }
+
+  // knoppen
+  document.querySelector('.banner-btn.next').addEventListener('click', () => { next(); restart(); });
+  document.querySelector('.banner-btn.prev').addEventListener('click', () => { prev(); restart(); });
+
+  // dots click
+  dotButtons.forEach(b => b.addEventListener('click', (e) => {
+    const i = Number(e.currentTarget.getAttribute('data-i'));
+    show(i); restart();
+  }));
+
+  function start() {
+    timer = setInterval(next, INTERVAL_MS);
+  }
+  function stop() {
+    clearInterval(timer); timer = null;
+  }
+  function restart() { stop(); start(); }
+
+  // pauzeer op hover/touch
+  const banner = document.getElementById('banner');
+  banner.addEventListener('mouseenter', stop);
+  banner.addEventListener('mouseleave', start);
+  banner.addEventListener('touchstart', stop, { passive:true });
+  banner.addEventListener('touchend', start, { passive:true });
+
+  show(0, true);
+  start();
 }
 
-// Video
+// === Video ===
 const frame = document.getElementById('tourFrame');
 const videoWrap = document.getElementById('videoWrap');
 const videoEmpty = document.getElementById('videoEmpty');
@@ -84,7 +104,7 @@ if (VIDEO_URL) {
   videoEmpty.classList.remove('hide');
 }
 
-// Tabs
+// === Tabs ===
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -95,7 +115,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
-// Documenten
+// === Documenten ===
 const docsList = document.getElementById('docsList');
 if (DOCUMENTS.length === 0) {
   docsList.innerHTML = '<div class="placeholder">Nog geen documenten toegevoegd. Voeg items toe in <code>scripts.js</code> → <b>DOCUMENTS</b>.</div>';
