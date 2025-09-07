@@ -1,9 +1,15 @@
 // === JOUW DATA ===
-// Let op: staan je foto's in een mapje (bv. 'fotos/')? Zet dan het pad voor elk item.
+// Als je de foto's in een mapje hebt gezet (bv. "fotos/"), zet dat pad voor elk item.
+// In jouw repo staan ze in de root, dus we gebruiken de bestandsnamen 1-op-1.
 const IMAGES = [
-
-  "WhatsApp Image 2025-09-07 at 13.51.06 (1).jpeg",
+  // --- EERST: jouw gewenste 5 ---
+  "WhatsApp Image 2025-09-07 at 13.51.24.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.27.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.06.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.03.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.06 (1).jpeg",
+
+  // --- DAN: de overige (behalve 26/51/50 varianten) ---
   "WhatsApp Image 2025-09-07 at 13.51.08.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.09.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.12.jpeg",
@@ -15,8 +21,6 @@ const IMAGES = [
   "WhatsApp Image 2025-09-07 at 13.51.16.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.18.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.21.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.24.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.27.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.29.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.35.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.39.jpeg",
@@ -25,14 +29,15 @@ const IMAGES = [
   "WhatsApp Image 2025-09-07 at 13.51.41.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.42 (1).jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.42.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.50.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.51 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.51.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.40.38.jpeg",
+
+  // --- LAATSTE: alle 26 / 51 / 50 bestanden ---
   "WhatsApp Image 2025-09-07 at 13.52.26 (1).jpeg",
   "WhatsApp Image 2025-09-07 at 13.52.26 (2).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.52.26.jpeg"
-   "WhatsApp Image 2025-09-07 at 13.40.38.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.03.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.52.26.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.51 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.51.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.50.jpeg"
 ];
 
 const VIDEO_URL = ""; // bv. 'https://www.youtube.com/embed/xxxxxxxx'
@@ -50,10 +55,10 @@ document.getElementById('year').textContent = new Date().getFullYear();
 const galleryHost = document.getElementById('gallery');
 const galleryEmpty = document.getElementById('gallery-empty');
 
-// Maak container met knoppen + dots
+// UI container
 function renderBanner() {
   galleryEmpty.classList.add('hide');
-  galleryHost.className = ''; // reset grid
+  galleryHost.className = ''; // reset grid styling
   galleryHost.innerHTML = `
     <div class="banner" id="banner">
       <img id="bannerImg" alt="Foto" />
@@ -64,23 +69,23 @@ function renderBanner() {
   `;
 }
 
-// Preload & filter ongeldige paden
+// Preload & filter ongeldige paden (zodat alles wat werkt meedraait)
 function preloadAndInit(list) {
-  if (!list || list.length === 0) return; 
+  if (!list || list.length === 0) return;
   const valid = [];
   let done = 0;
 
   list.forEach(src => {
     const im = new Image();
     im.onload = () => { valid.push(src); finish(); };
-    im.onerror = () => { finish(); }; // overslaan als fout
+    im.onerror = () => { finish(); }; // sla over als hij niet laadt
     im.src = src;
   });
 
   function finish() {
     done++;
     if (done === list.length) {
-      if (valid.length === 0) return; // niets bruikbaar
+      if (valid.length === 0) return;
       renderBanner();
       initSlider(valid);
     }
@@ -93,7 +98,9 @@ function initSlider(list) {
   const nextBtn = document.querySelector('.banner-btn.next');
   const prevBtn = document.querySelector('.banner-btn.prev');
 
-  dotsEl.innerHTML = list.map((_, i) => `<button class="dot" data-i="${i}" aria-label="Slide ${i+1}"></button>`).join('');
+  dotsEl.innerHTML = list.map((_, i) =>
+    `<button class="dot" data-i="${i}" aria-label="Slide ${i+1}"></button>`
+  ).join('');
   const dotButtons = Array.from(dotsEl.querySelectorAll('.dot'));
 
   let index = 0;
