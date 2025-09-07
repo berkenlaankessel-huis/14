@@ -187,17 +187,37 @@ if (VIDEO_URL) {
   videoEmpty.classList.remove('hide');
 }
 
+// ---------- Tabs (3 stuks: details / documenten / biedingen) ----------
+(() => {
+  const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
+  const tabPanels  = Array.from(document.querySelectorAll('.tab-content'));
 
-// ---------- Tabs ----------
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const tab = btn.getAttribute('data-tab');
-    document.getElementById('tab-details').classList.toggle('hide', tab !== 'details');
-    document.getElementById('tab-documenten').classList.toggle('hide', tab !== 'documenten');
+  function showTab(name) {
+    // knoppen
+    tabButtons.forEach(b => {
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+
+    // panelen
+    tabPanels.forEach(p => {
+      const isTarget = p.id === `tab-${name}`;
+      p.style.display = isTarget ? '' : 'none';
+      p.classList.toggle('hide', !isTarget);
+    });
+  }
+
+  // click-handlers
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.dataset.tab; // 'details' | 'documenten' | 'biedingen'
+      showTab(name);
+    });
   });
-});
+
+  // start op "details"
+  showTab('details');
+})();
+
 
 
 // ---------- Documenten ----------
