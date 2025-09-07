@@ -83,3 +83,30 @@ html,body{margin:0;padding:0;font-family:ui-sans-serif,system-ui,-apple-system,S
   cursor:pointer;
 }
 .banner-dots .dot.active{ background:#fff; border-color:#fff; }
+/* === Lightbox === */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.lightbox.active { display: flex; }
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,.6);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 36px;
+  color: #fff;
+  cursor: pointer;
+}
