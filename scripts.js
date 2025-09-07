@@ -1,6 +1,6 @@
 // === JOUW DATA ===
-// Als je de foto's in een mapje hebt gezet (bv. "fotos/"), zet dat pad voor elk item.
-// In jouw repo staan ze in de root, dus we gebruiken de bestandsnamen 1-op-1.
+// In jouw repo staan de foto's in de root; gebruik exacte bestandsnamen.
+// (Als je later een mapje gebruikt, bv. 'fotos/', zet dat pad voor elk item.)
 const IMAGES = [
   // --- EERST: jouw gewenste 5 ---
   "WhatsApp Image 2025-09-07 at 13.51.24.jpeg",
@@ -48,14 +48,16 @@ const DOCUMENTS = [
 ];
 // === EINDE DATA ===
 
+
 // Footer jaar
 document.getElementById('year').textContent = new Date().getFullYear();
+
 
 // ---------- Banner i.p.v. grid ----------
 const galleryHost = document.getElementById('gallery');
 const galleryEmpty = document.getElementById('gallery-empty');
 
-// UI container
+// Render container (banner + knoppen + dots)
 function renderBanner() {
   galleryEmpty.classList.add('hide');
   galleryHost.className = ''; // reset grid styling
@@ -67,9 +69,21 @@ function renderBanner() {
       <div class="banner-dots" id="bannerDots"></div>
     </div>
   `;
+
+  // Lightbox HTML dynamisch toevoegen als die nog niet bestaat
+  if (!document.getElementById('lightbox')) {
+    const lb = document.createElement('div');
+    lb.className = 'lightbox';
+    lb.id = 'lightbox';
+    lb.innerHTML = `
+      <span class="lightbox-close" id="lightboxClose">&times;</span>
+      <img id="lightboxImg" src="" alt="Foto in groot formaat" />
+    `;
+    document.body.appendChild(lb);
+  }
 }
 
-// Preload & filter ongeldige paden (zodat alles wat werkt meedraait)
+// Preload & filter ongeldige paden (zodat slider nooit vastloopt)
 function preloadAndInit(list) {
   if (!list || list.length === 0) return;
   const valid = [];
@@ -78,7 +92,7 @@ function preloadAndInit(list) {
   list.forEach(src => {
     const im = new Image();
     im.onload = () => { valid.push(src); finish(); };
-    im.onerror = () => { finish(); }; // sla over als hij niet laadt
+    im.onerror = () => { finish(); }; // sla over als hij niet laadt (naam/path fout)
     im.src = src;
   });
 
@@ -127,11 +141,26 @@ function initSlider(list) {
     show(i); restart();
   }));
 
-  const banner = document.getElementById('banner');
-  banner.addEventListener('mouseenter', stop);
-  banner.addEventListener('mouseleave', start);
-  banner.addEventListener('touchstart', stop, { passive:true });
-  banner.addEventListener('touchend', start, { passive:true });
+  // === Lightbox functionaliteit ===
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+
+  imgEl.style.cursor = 'zoom-in';
+  imgEl.addEventListener('click', () => {
+    lightboxImg.src = list[index];
+    lightbox.classList.add('active');
+  });
+
+  lightboxClose.addEventListener('click', () => {
+    lightbox.classList.remove('active');
+  });
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) {
+      lightbox.classList.remove('active');
+    }
+  });
 
   show(0, true);
   start();
@@ -142,6 +171,7 @@ if (IMAGES.length === 0) {
 } else {
   preloadAndInit(IMAGES);
 }
+
 
 // ---------- Video ----------
 const frame = document.getElementById('tourFrame');
@@ -156,6 +186,7 @@ if (VIDEO_URL) {
   videoEmpty.classList.remove('hide');
 }
 
+
 // ---------- Tabs ----------
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -166,6 +197,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.getElementById('tab-documenten').classList.toggle('hide', tab !== 'documenten');
   });
 });
+
 
 // ---------- Documenten ----------
 const docsList = document.getElementById('docsList');
