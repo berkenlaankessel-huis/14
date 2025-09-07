@@ -1,7 +1,38 @@
 // === VUL HIER JOUW DATA IN ===
 const IMAGES = [
-  // Voorbeeld: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be',
+  "WhatsApp Image 2025-09-07 at 13.40.38.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.03.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.06 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.06.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.08.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.09.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.12.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.13 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.13.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.14.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.15.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.16 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.16.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.18.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.21.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.24.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.27.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.29.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.35.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.39.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.40.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.41 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.41.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.42 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.42.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.50.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.51 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.51.51.jpeg",
+  "WhatsApp Image 2025-09-07 at 13.52.26 (1).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.52.26 (2).jpeg",
+  "WhatsApp Image 2025-09-07 at 13.52.26.jpeg"
 ];
+
 
 const VIDEO_URL = ""; // bv. 'https://www.youtube.com/embed/xxxxxxxx'
 
