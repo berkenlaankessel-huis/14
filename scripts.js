@@ -36,7 +36,7 @@ const IMAGES = [
   "WhatsApp Image 2025-09-07 at 13.51.50.jpeg"
 ];
 
-const VIDEO_URL = "https://www.youtube.com/embed/yEjpqcgucxA";
+const VIDEO_URL = "https://www.youtube.com/embed/830jJZiPLtY";
 
 const DOCUMENTS = [
   // Vul aan, bvb:
