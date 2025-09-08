@@ -151,16 +151,21 @@ const frame = document.getElementById('tourFrame');
 const videoWrap = document.getElementById('videoWrap');
 const videoEmpty = document.getElementById('videoEmpty');
 if (frame && videoWrap && videoEmpty) {
-  if (VIDEO_URL) {
-    frame.src = VIDEO_URL;
-    videoEmpty.classList.add('hide');
-    videoWrap.classList.remove('hide');
-  } else {
-    videoWrap.classList.add('hide');
-    videoEmpty.classList.remove('hide');
-  }
+if (VIDEO_URL) {
+  frame.src = VIDEO_URL;
+  videoEmpty.classList.add('hide');
+  videoWrap.classList.remove('hide');
+  // extra hard override
+  videoEmpty.style.display = 'none';
+  videoWrap.style.display = '';
+} else {
+  videoWrap.classList.add('hide');
+  videoEmpty.classList.remove('hide');
+  // extra hard override
+  videoWrap.style.display = 'none';
+  videoEmpty.style.display = '';
 }
-
+ 
 
 // ---------- Tabs (details / documenten / biedingen) ----------
 (() => {
