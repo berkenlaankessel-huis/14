@@ -1,15 +1,12 @@
 // === JOUW DATA ===
-// In jouw repo staan de foto's in de root; gebruik exacte bestandsnamen.
-// (Als je later een mapje gebruikt, bv. 'fotos/', zet dat pad voor elk item.)
+// Bestanden staan in de root van je repo.
 const IMAGES = [
-  // --- EERST: jouw gewenste 5 ---
   "WhatsApp Image 2025-09-07 at 13.51.24.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.27.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.06.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.03.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.06 (1).jpeg",
 
-  // --- DAN: de overige (behalve 26/51/50 varianten) ---
   "WhatsApp Image 2025-09-07 at 13.51.08.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.09.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.12.jpeg",
@@ -31,7 +28,6 @@ const IMAGES = [
   "WhatsApp Image 2025-09-07 at 13.51.42.jpeg",
   "WhatsApp Image 2025-09-07 at 13.40.38.jpeg",
 
-  // --- LAATSTE: alle 26 / 51 / 50 bestanden ---
   "WhatsApp Image 2025-09-07 at 13.52.26 (1).jpeg",
   "WhatsApp Image 2025-09-07 at 13.52.26 (2).jpeg",
   "WhatsApp Image 2025-09-07 at 13.52.26.jpeg",
@@ -40,28 +36,29 @@ const IMAGES = [
   "WhatsApp Image 2025-09-07 at 13.51.50.jpeg"
 ];
 
-const VIDEO_URL = "https://www.youtube.com/embed/yEjpqcgucxA"; // bv. 'https://www.youtube.com/embed/xxxxxxxx'
-
+const VIDEO_URL = "https://www.youtube.com/embed/yEjpqcgucxA";
 
 const DOCUMENTS = [
-  // { name: 'EPC Certificaat – B (Ref. 20250906-0003677153-RES-1)', url: 'documents/epc.pdf' },
-  // { name: 'Stedenbouwkundige vergunning – ontvangen', url: 'documents/stedenbouw.pdf' },
+  // Vul aan, bvb:
+  // { name: 'EPC – Label B (ref. 20250906-0003677153-RES-1)', url: 'documents/epc.pdf' },
+  // { name: 'Stedenbouwkundige vergunning', url: 'documents/stedenbouw.pdf' },
 ];
 // === EINDE DATA ===
 
 
 // Footer jaar
-document.getElementById('year').textContent = new Date().getFullYear();
+document.addEventListener('DOMContentLoaded', () => {
+  const y = document.getElementById('year');
+  if (y) y.textContent = new Date().getFullYear();
+});
 
 
 // ---------- Banner i.p.v. grid ----------
 const galleryHost = document.getElementById('gallery');
 const galleryEmpty = document.getElementById('gallery-empty');
 
-// Render container (banner + knoppen + dots)
 function renderBanner() {
   galleryEmpty.classList.add('hide');
-  galleryHost.className = ''; // reset grid styling
   galleryHost.innerHTML = `
     <div class="banner" id="banner">
       <img id="bannerImg" alt="Foto" />
@@ -70,21 +67,8 @@ function renderBanner() {
       <div class="banner-dots" id="bannerDots"></div>
     </div>
   `;
-
-  // Lightbox HTML dynamisch toevoegen als die nog niet bestaat
-  if (!document.getElementById('lightbox')) {
-    const lb = document.createElement('div');
-    lb.className = 'lightbox';
-    lb.id = 'lightbox';
-    lb.innerHTML = `
-      <span class="lightbox-close" id="lightboxClose">&times;</span>
-      <img id="lightboxImg" src="" alt="Foto in groot formaat" />
-    `;
-    document.body.appendChild(lb);
-  }
 }
 
-// Preload & filter ongeldige paden (zodat slider nooit vastloopt)
 function preloadAndInit(list) {
   if (!list || list.length === 0) return;
   const valid = [];
@@ -93,14 +77,14 @@ function preloadAndInit(list) {
   list.forEach(src => {
     const im = new Image();
     im.onload = () => { valid.push(src); finish(); };
-    im.onerror = () => { finish(); }; // sla over als hij niet laadt (naam/path fout)
+    im.onerror = finish; // sla over
     im.src = src;
   });
 
   function finish() {
     done++;
     if (done === list.length) {
-      if (valid.length === 0) return;
+      if (!valid.length) return;
       renderBanner();
       initSlider(valid);
     }
@@ -142,7 +126,7 @@ function initSlider(list) {
     show(i); restart();
   }));
 
-  // === Lightbox functionaliteit ===
+  // Lightbox
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
@@ -152,53 +136,39 @@ function initSlider(list) {
     lightboxImg.src = list[index];
     lightbox.classList.add('active');
   });
-
-  lightboxClose.addEventListener('click', () => {
-    lightbox.classList.remove('active');
-  });
-
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-      lightbox.classList.remove('active');
-    }
-  });
+  lightboxClose.addEventListener('click', () => lightbox.classList.remove('active'));
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('active'); });
 
   show(0, true);
   start();
 }
 
-if (IMAGES.length === 0) {
-  // laat placeholder staan
-} else {
-  preloadAndInit(IMAGES);
-}
+if (IMAGES.length) preloadAndInit(IMAGES);
 
 
 // ---------- Video ----------
 const frame = document.getElementById('tourFrame');
 const videoWrap = document.getElementById('videoWrap');
 const videoEmpty = document.getElementById('videoEmpty');
-if (VIDEO_URL) {
-  frame.src = VIDEO_URL;
-  videoEmpty.classList.add('hide');
-  videoWrap.classList.remove('hide');
-} else {
-  videoWrap.classList.add('hide');
-  videoEmpty.classList.remove('hide');
+if (frame && videoWrap && videoEmpty) {
+  if (VIDEO_URL) {
+    frame.src = VIDEO_URL;
+    videoEmpty.classList.add('hide');
+    videoWrap.classList.remove('hide');
+  } else {
+    videoWrap.classList.add('hide');
+    videoEmpty.classList.remove('hide');
+  }
 }
 
-// ---------- Tabs (3 stuks: details / documenten / biedingen) ----------
+
+// ---------- Tabs (details / documenten / biedingen) ----------
 (() => {
   const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
   const tabPanels  = Array.from(document.querySelectorAll('.tab-content'));
 
   function showTab(name) {
-    // knoppen
-    tabButtons.forEach(b => {
-      b.classList.toggle('active', b.dataset.tab === name);
-    });
-
-    // panelen
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tab === name));
     tabPanels.forEach(p => {
       const isTarget = p.id === `tab-${name}`;
       p.style.display = isTarget ? '' : 'none';
@@ -206,22 +176,15 @@ if (VIDEO_URL) {
     });
   }
 
-  // click-handlers
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const name = btn.dataset.tab; // 'details' | 'documenten' | 'biedingen'
-      showTab(name);
-    });
-  });
-
-  // start op "details"
+  tabButtons.forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.tab)));
   showTab('details');
 })();
+
 
 // ---------- Documenten ----------
 (() => {
   const docsList = document.getElementById('docsList');
-  if (!docsList) return; // paneel bestaat (nog) niet
+  if (!docsList) return;
 
   if (!Array.isArray(DOCUMENTS) || DOCUMENTS.length === 0) {
     docsList.innerHTML =
@@ -236,24 +199,3 @@ if (VIDEO_URL) {
     </div>
   `).join('');
 })();
-
-/* Tabs mogen aflopen op kleinere schermen */
-.tabs{ display:flex; gap:8px; flex-wrap:wrap; }
-.tab-btn{ flex:1 1 auto; max-width:100%; }
-
-/* Tekst netjes laten teruglopen in kaartjes/rijtjes */
-.card, .content, .kv-item, .doc-row, .banner, .prose {
-  overflow-wrap:anywhere;
-  word-break:normal;
-}
-
-/* Waardes in kleine badges/chips mogen afbreken i.p.v. uit het vak lopen */
-.kv-item .value, .kv-item { white-space:normal; }
-
-/* Zorg dat lijst-items niet buiten de kaart schieten */
-.prose li { margin:0.25rem 0; }
-
-/* Header e-mail knop netjes rechts zonder uitrekken */
-.actions { display:flex; align-items:center; gap:8px; }
-
-
