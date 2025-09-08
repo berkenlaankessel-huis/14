@@ -1,256 +1,66 @@
-/* ===== BASIS ===== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+:root{ 
+  --bg:#f7f8fb; --surface:#fff; --text:#111827; --muted:#6b7280; --border:#e5e7eb;
+  --brand:#111827; --brand-contrast:#fff;
 }
-body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  background: #fafafa;
-  color: #222;
-}
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-h1, h2, h3 {
-  margin-bottom: 8px;
-}
-p {
-  margin-bottom: 12px;
-}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial}
+body{background:var(--bg);color:var(--text);}
 
-/* ===== HEADER ===== */
-.header {
-  background: #fff;
-  border-bottom: 1px solid #ddd;
-  padding: 12px 0;
-}
-.header .inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.brand .badge {
-  font-size: 28px;
-}
-.hero-title {
-  font-size: 20px;
-  font-weight: bold;
-}
-.hero-sub {
-  color: #666;
-  font-size: 14px;
-}
+.container{max-width:1100px;margin:0 auto;padding:0 16px;}
 
-/* ===== KNOPPEN ===== */
-.btn {
-  background: #0077cc;
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 14px;
-  transition: background 0.2s;
-}
-.btn:hover {
-  background: #005fa3;
-}
+.header{position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--border);z-index:10}
+.header .inner{display:flex;justify-content:space-between;align-items:center;padding:12px 0;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.badge{width:42px;height:42px;border-radius:12px;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:20px}
+.hero-title{font-weight:700;font-size:20px;line-height:1.2}
+.hero-sub{font-size:14px;color:var(--muted)}
+.actions .btn{padding:8px 12px;border:1px solid var(--border);background:var(--surface);border-radius:999px;text-decoration:none;color:var(--text)}
 
-/* ===== CARDS ===== */
-.card {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-.card .content {
-  font-size: 15px;
-}
+.row{display:flex;gap:16px;flex-wrap:wrap}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.card .content{padding:16px}
+.prose p{margin:0 0 8px}
+.prose ul{padding-left:18px;margin:0}
 
-/* ===== ROW LAYOUT ===== */
-.row {
-  display: flex;
-  gap: 16px;
-}
-.row .card {
-  flex: 1;
-}
+.placeholder{padding:16px;border:1px dashed var(--border);border-radius:12px;color:var(--muted);background:#fafafa}
+.notice{padding:12px;border-radius:12px;background:#fff7ed;border:1px solid #fde68a}
 
-/* ===== KV (kenmerken) ===== */
-.kv {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
-  margin-top: 16px;
-}
-.kv-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.kv-item .label {
-  font-size: 12px;
-  color: #666;
-}
-.kv-item .value {
-  font-weight: bold;
-}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:10px}
+.kv-item{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:#f9fafb}
+.kv-item .label{font-size:12px;color:var(--muted)}
+.kv-item .value{font-weight:600;}
 
-/* ===== NOTICE ===== */
-.notice {
-  background: #f0f8ff;
-  padding: 12px;
-  border-left: 4px solid #0077cc;
-  border-radius: 4px;
-  font-size: 14px;
-}
+/* Banner (gallery) */
+.gallery{}
+.banner{position:relative;width:100%;aspect-ratio:21/9;max-height:440px;border-radius:18px;overflow:hidden;border:1px solid var(--border);background:#000}
+#bannerImg{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
+.is-fading{opacity:.6}
+.banner-btn{position:absolute;top:50%;transform:translateY(-50%);border:none;background:rgba(255,255,255,.8);border-radius:999px;padding:8px 12px;font-size:18px;cursor:pointer}
+.banner-btn.prev{left:10px}
+.banner-btn.next{right:10px}
+.banner-dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:6px}
+.banner-dots .dot{width:8px;height:8px;border-radius:8px;border:none;background:rgba(255,255,255,.6);cursor:pointer}
+.banner-dots .dot.active{background:#fff}
 
-/* ===== TABS ===== */
-.tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.tab-btn {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-bottom: none;
-  background: #f9f9f9;
-  cursor: pointer;
-  border-radius: 4px 4px 0 0;
-}
-.tab-btn.active {
-  background: #fff;
-  font-weight: bold;
-}
-.tab-content {
-  border: 1px solid #ddd;
-  border-radius: 0 4px 4px 4px;
-  padding: 16px;
-  background: #fff;
-}
+/* Tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.tab-btn{padding:10px 14px;border-radius:999px;border:1px solid var(--border);background:var(--surface);cursor:pointer}
+.tab-btn.active{background:var(--brand);color:var(--brand-contrast);border-color:var(--brand)}
+.tab-content{}
 
-/* ===== DOCUMENTEN-KNOPEN ===== */
-.btn-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+/* Document rows */
+.doc-row{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px;background:#f9fafb}
+.doc-row .btn{padding:6px 10px;border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);background:#fff}
 
-/* ===== GALLERIJ / BANNER ===== */
-.banner {
-  position: relative;
-  max-height: 500px;
-  overflow: hidden;
-  border-radius: 6px;
-}
-.banner img {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: opacity 0.6s;
-}
-.banner img.is-fading {
-  opacity: 0.4;
-}
-.banner-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 50%;
-  font-size: 18px;
-}
-.banner-btn.prev { left: 10px; }
-.banner-btn.next { right: 10px; }
-.banner-dots {
-  text-align: center;
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  right: 0;
-}
-.banner-dots .dot {
-  background: #bbb;
-  border: none;
-  border-radius: 50%;
-  width: 10px;
-  height: 10px;
-  margin: 0 3px;
-  display: inline-block;
-  cursor: pointer;
-}
-.banner-dots .dot.active {
-  background: #0077cc;
-}
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;justify-content:center;align-items:center;z-index:9999}
+.lightbox.active{display:flex}
+.lightbox img{max-width:90%;max-height:90%;border-radius:12px;box-shadow:0 0 20px rgba(0,0,0,.6)}
+.lightbox-close{position:absolute;top:20px;right:30px;font-size:36px;color:#fff;cursor:pointer}
 
-/* ===== LIGHTBOX ===== */
-.lightbox {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.9);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-.lightbox.active {
-  display: flex;
-}
-.lightbox img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 6px;
-}
-.lightbox-close {
-  position: absolute;
-  top: 20px; right: 30px;
-  font-size: 30px;
-  color: #fff;
-  cursor: pointer;
-}
-
-/* ===== PLACEHOLDER ===== */
-.placeholder {
-  padding: 16px;
-  background: #f9f9f9;
-  color: #666;
-  font-size: 14px;
-  border: 1px dashed #ccc;
-  border-radius: 4px;
-  text-align: center;
-}
-.hide {
-  display: none;
-}
-
-/* ===== FOOTER ===== */
-.footer {
-  margin-top: 24px;
-  background: #fff;
-  border-top: 1px solid #ddd;
-  padding: 12px 0;
-  font-size: 13px;
-  color: #666;
-}
-.footer .inner {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
+/* Mobile fixes */
+.card,.content,.kv-item,.doc-row,.banner,.prose{overflow-wrap:anywhere;word-break:normal}
+.kv-item .value,.kv-item{white-space:normal}
+.prose li{margin:4px 0}
+/* alles met .hide verbergen */
+.hide { display: none !important; }
