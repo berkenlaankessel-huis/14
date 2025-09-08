@@ -64,3 +64,9 @@ body{background:var(--bg);color:var(--text);}
 .prose li{margin:4px 0}
 /* alles met .hide verbergen */
 .hide { display: none !important; }
+/* extra: forceer verbergen van placeholders als .hide is gezet */
+.placeholder.hide,
+#gallery-empty.hide,
+#videoEmpty.hide {
+  display: none !important;
+}
