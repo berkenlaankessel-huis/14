@@ -81,7 +81,7 @@ function preloadAndInit(list) {
   list.forEach(src => {
     const im = new Image();
     im.onload = () => { valid.push(src); finish(); };
-    im.onerror = finish;
+    im.onerror = finish; // sla kapotte items over
     im.referrerPolicy = "no-referrer";
     im.src = toURL(src);
   });
@@ -225,10 +225,3 @@ if (frame && videoWrap && videoEmpty) {
     </div>
   `;
 })();
-
-/* Extra styling voor de document-knoppen */
-.btn-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
