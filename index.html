@@ -8,27 +8,27 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+
 <header class="header">
   <div class="inner container">
     <div class="brand">
       <div class="badge">🏠</div>
       <div>
-        <div class="hero-title">Kessel Berkenlaan 14 </div>
+        <div class="hero-title">Kessel Berkenlaan 14</div>
         <div class="hero-sub">Te koop · € 485.000</div>
       </div>
     </div>
- <div class="actions">
-  <a class="btn" href="mailto:berkenlaankessel@gmail.com">E-mail</a>
-</div>
 
-
+    <div class="actions">
+      <a class="btn" href="mailto:berkenlaankessel@gmail.com">E-mail</a>
+    </div>
   </div>
 </header>
 
 <main class="container">
-  <!-- GALERIJ -->
+  <!-- GALERIJ / BANNER -->
   <section>
-    <div class="grid gallery" id="gallery"></div>
+    <div id="gallery" class="gallery"></div>
     <div id="gallery-empty" class="placeholder">
       Voeg foto-URLs toe in <code>scripts.js</code> → <b>IMAGES</b> om de galerij te tonen.
     </div>
@@ -71,78 +71,74 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen></iframe>
         </div>
-        <div id="videoEmpty" class="placeholder hide">Nog geen video-link ingevuld. Voeg een YouTube/Vimeo URL toe in <code>scripts.js</code> → <b>VIDEO_URL</b>.</div>
+        <div id="videoEmpty" class="placeholder hide">
+          Nog geen video-link ingevuld. Voeg een YouTube/Vimeo URL toe in <code>scripts.js</code> → <b>VIDEO_URL</b>.
+        </div>
       </div>
     </div>
   </section>
 
   <!-- TABS -->
-<section style="margin-top: 16px;">
+  <section style="margin-top: 16px;">
+    <!-- tab-knoppen ALTIJD zichtbaar -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="details">Details</button>
+      <button class="tab-btn" data-tab="documenten">Belangrijke documenten</button>
+      <button class="tab-btn" data-tab="biedingen">Biedingsprocedure</button>
+    </div>
 
-  <!-- altijd zichtbaar: de 3 tab-knoppen -->
-  <div class="tabs">
-    <button class="tab-btn active" data-tab="details">Details</button>
-    <button class="tab-btn" data-tab="documenten">Belangrijke documenten</button>
-    <button class="tab-btn" data-tab="biedingen">Biedingsprocedure</button>
-  </div>
-
-  <!-- Paneel 1: DETAILS -->
-  <div id="tab-details" class="tab-content">
-    <div class="card">
-      <div class="content prose">
-        <ul class="list-disc pl-5 space-y-1">
-          <li>Bouwjaar: 1983</li>
-          <li>Aantal verdiepingen: 3</li>
-          <li>Staat van het gebouw: Goed</li>
-          <li>Gevelbreedte: 7 m</li>
-          <li>Aantal gevels: 3</li>
-          <li>Bewoonbare oppervlakte: 183 m²</li>
-          <li>Keuken: hyper uitgerust (18 m²)</li>
-          <li>Slaapkamers: 3 (12 m², 12 m², 11 m²)</li>
-          <li>Badkamers: 1</li>
-          <li>WC: 2</li>
-          <li>Wasplaats: ja</li>
-          <li>Kelder & zolder: aanwezig (zolder ca. 30 m²)</li>
-          <li>Carport en garage: aanwezig</li>
-          <li>Perceel: 463 m² – breedte aan straat 11 m</li>
-          <li>EPC: 148 kWh/m² (Label B)</li>
-        </ul>
+    <!-- Paneel 1: DETAILS -->
+    <div id="tab-details" class="tab-content">
+      <div class="card">
+        <div class="content prose">
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Bouwjaar: 1983</li>
+            <li>Aantal verdiepingen: 3</li>
+            <li>Staat van het gebouw: Goed</li>
+            <li>Gevelbreedte: 7 m</li>
+            <li>Aantal gevels: 3</li>
+            <li>Bewoonbare oppervlakte: 183 m²</li>
+            <li>Keuken: hyper uitgerust (18 m²)</li>
+            <li>Slaapkamers: 3 (12 m², 12 m², 11 m²)</li>
+            <li>Badkamers: 1</li>
+            <li>WC: 2</li>
+            <li>Wasplaats: ja</li>
+            <li>Kelder & zolder: aanwezig (zolder ca. 30 m²)</li>
+            <li>Carport en garage: aanwezig</li>
+            <li>Perceel: 463 m² – breedte aan straat 11 m</li>
+            <li>EPC: 148 kWh/m² (Label B)</li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Paneel 2: DOCUMENTEN -->
-  <div id="tab-documenten" class="tab-content" style="display:none;">
-    <div class="card">
-      <div class="content prose">
-        <h3 class="font-semibold mb-3">Belangrijke documenten</h3>
-        <!-- scripts.js vult dit automatisch met knoppen -->
-        <div id="docsList"></div>
+    <!-- Paneel 2: DOCUMENTEN -->
+    <div id="tab-documenten" class="tab-content" style="display:none;">
+      <div class="card">
+        <div class="content prose">
+          <h3 class="font-semibold mb-3">Belangrijke documenten</h3>
+          <div id="docsList"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Paneel 3: BIEDINGSPROCEDURE -->
-  <div id="tab-biedingen" class="tab-content" style="display:none;">
-    <div class="card">
-      <div class="content prose">
-        <h3 class="font-semibold mb-3">Biedingsprocedure</h3>
-        <p>
-          Iedereen krijgt de kans om een bod uit te brengen, ongeacht het moment van bezoek.
-          Stuur je bod vóór <strong>19u30</strong> per mail naar
-          <a href="mailto:berkenlaankessel@gmail.com" class="underline">berkenlaankessel@gmail.com</a>.
-        </p>
-        <p class="mt-2">
-          De twee hoogste bieders krijgen elkaars bod te zien en kunnen daarna nog één keer een verbeterd bod indienen.
-          Zo hebben beide kandidaten een eerlijke kans om het huis alsnog te verwerven.
-        </p>
+    <!-- Paneel 3: BIEDINGSPROCEDURE -->
+    <div id="tab-biedingen" class="tab-content" style="display:none;">
+      <div class="card">
+        <div class="content prose">
+          <h3 class="font-semibold mb-3">Biedingsprocedure</h3>
+          <p>
+            Iedereen krijgt de kans om een bod uit te brengen, ongeacht het moment van bezoek.
+            Stuur je bod vóór <strong>19u30</strong> per mail naar
+            <a href="mailto:berkenlaankessel@gmail.com" class="underline">berkenlaankessel@gmail.com</a>.
+          </p>
+          <p class="mt-2">
+            De twee hoogste bieders krijgen elkaars bod te zien en kunnen daarna nog één keer een verbeterd bod indienen.
+            Zo hebben beide kandidaten een eerlijke kans om het huis alsnog te verwerven.
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-
-</section>
-
-
   </section>
 </main>
 
@@ -153,12 +149,13 @@
   </div>
 </footer>
 
-<div id="modal" class="modal"><img id="modalImg" alt="Foto"/></div>
-<script src="scripts.js"></script>
-  <div class="lightbox" id="lightbox">
+<!-- Lightbox (leeg, wordt gevuld door JS) -->
+<div class="lightbox" id="lightbox">
   <span class="lightbox-close" id="lightboxClose">&times;</span>
   <img id="lightboxImg" src="" alt="Foto in groot formaat" />
 </div>
 
+<!-- Laad JS NA de DOM -->
+<script src="scripts.js" defer></script>
 </body>
 </html>
