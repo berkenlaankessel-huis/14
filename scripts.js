@@ -39,7 +39,8 @@ const IMAGES = [
 const VIDEO_URL = "https://www.youtube.com/embed/830jJZiPLtY";
 
 const DOCUMENTS = [
-  // { name: 'EPC – Label B (ref. 20250906-0003677153-RES-1)', url: 'documents/epc.pdf' },
+  // Voorbeeld:
+  // { name: 'EPC – Label B', url: 'documents/epc.pdf' },
 ];
 // === EINDE DATA ===
 
@@ -80,7 +81,7 @@ function preloadAndInit(list) {
   list.forEach(src => {
     const im = new Image();
     im.onload = () => { valid.push(src); finish(); };
-    im.onerror = finish; // sla over bij fout
+    im.onerror = finish;
     im.referrerPolicy = "no-referrer";
     im.src = toURL(src);
   });
