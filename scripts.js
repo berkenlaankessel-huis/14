@@ -1,5 +1,5 @@
 // === JOUW DATA ===
-// Bestanden staan in de root van je repo.
+// Zet de .jpeg-bestanden in dezelfde map als index.html
 const IMAGES = [
   "WhatsApp Image 2025-09-07 at 13.51.24.jpeg",
   "WhatsApp Image 2025-09-07 at 13.51.27.jpeg",
@@ -39,26 +39,26 @@ const IMAGES = [
 const VIDEO_URL = "https://www.youtube.com/embed/830jJZiPLtY";
 
 const DOCUMENTS = [
-  // Vul aan, bvb:
   // { name: 'EPC – Label B (ref. 20250906-0003677153-RES-1)', url: 'documents/epc.pdf' },
-  // { name: 'Stedenbouwkundige vergunning', url: 'documents/stedenbouw.pdf' },
 ];
 // === EINDE DATA ===
 
+// ===== Helper: veilige URL voor bestandsnamen met spaties/() =====
+const toURL = (p) => encodeURI(p);
 
-// Footer jaar
+// ===== Footer jaar =====
 document.addEventListener('DOMContentLoaded', () => {
   const y = document.getElementById('year');
   if (y) y.textContent = new Date().getFullYear();
 });
 
-
-// ---------- Banner i.p.v. grid ----------
+// ===== Galerij als banner-slider =====
 const galleryHost = document.getElementById('gallery');
 const galleryEmpty = document.getElementById('gallery-empty');
 
 function renderBanner() {
-  galleryEmpty.classList.add('hide');
+  if (galleryEmpty) galleryEmpty.classList.add('hide');
+  if (!galleryHost) return;
   galleryHost.innerHTML = `
     <div class="banner" id="banner">
       <img id="bannerImg" alt="Foto" />
@@ -70,21 +70,28 @@ function renderBanner() {
 }
 
 function preloadAndInit(list) {
-  if (!list || list.length === 0) return;
+  if (!list || list.length === 0 || !galleryHost) {
+    if (galleryEmpty) galleryEmpty.classList.remove('hide');
+    return;
+  }
   const valid = [];
   let done = 0;
 
   list.forEach(src => {
     const im = new Image();
     im.onload = () => { valid.push(src); finish(); };
-    im.onerror = finish; // sla over
-    im.src = src;
+    im.onerror = finish; // sla over bij fout
+    im.referrerPolicy = "no-referrer";
+    im.src = toURL(src);
   });
 
   function finish() {
     done++;
     if (done === list.length) {
-      if (!valid.length) return;
+      if (!valid.length) {
+        if (galleryEmpty) galleryEmpty.classList.remove('hide');
+        return;
+      }
       renderBanner();
       initSlider(valid);
     }
@@ -96,6 +103,8 @@ function initSlider(list) {
   const dotsEl = document.getElementById('bannerDots');
   const nextBtn = document.querySelector('.banner-btn.next');
   const prevBtn = document.querySelector('.banner-btn.prev');
+
+  if (!imgEl || !dotsEl || !nextBtn || !prevBtn) return;
 
   dotsEl.innerHTML = list.map((_, i) =>
     `<button class="dot" data-i="${i}" aria-label="Slide ${i+1}"></button>`
@@ -110,20 +119,19 @@ function initSlider(list) {
     index = (i + list.length) % list.length;
     if (!instant) imgEl.classList.add('is-fading');
     imgEl.onload = () => imgEl.classList.remove('is-fading');
-    imgEl.src = list[index];
+    imgEl.src = toURL(list[index]);
     dotButtons.forEach((b, k) => b.classList.toggle('active', k === index));
   }
   function next(){ show(index + 1); }
   function prev(){ show(index - 1); }
-  function start(){ timer = setInterval(next, INTERVAL_MS); }
-  function stop(){ clearInterval(timer); timer = null; }
-  function restart(){ stop(); start(); }
+  function start(){ stop(); timer = setInterval(next, INTERVAL_MS); }
+  function stop(){ if (timer) clearInterval(timer); timer = null; }
 
-  nextBtn.addEventListener('click', () => { next(); restart(); });
-  prevBtn.addEventListener('click', () => { prev(); restart(); });
+  nextBtn.addEventListener('click', () => { next(); start(); });
+  prevBtn.addEventListener('click', () => { prev(); start(); });
   dotButtons.forEach(b => b.addEventListener('click', (e) => {
     const i = Number(e.currentTarget.getAttribute('data-i'));
-    show(i); restart();
+    show(i); start();
   }));
 
   // Lightbox
@@ -131,43 +139,55 @@ function initSlider(list) {
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
 
-  imgEl.style.cursor = 'zoom-in';
-  imgEl.addEventListener('click', () => {
-    lightboxImg.src = list[index];
-    lightbox.classList.add('active');
-  });
-  lightboxClose.addEventListener('click', () => lightbox.classList.remove('active'));
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('active'); });
+  if (lightbox && lightboxImg && lightboxClose) {
+    imgEl.style.cursor = 'zoom-in';
+    imgEl.addEventListener('click', () => {
+      lightboxImg.src = toURL(list[index]);
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+    lightboxClose.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+      document.body.style.overflow = '';
+    });
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightboxClose.click();
+    });
+  }
 
   show(0, true);
   start();
 }
 
-if (IMAGES.length) preloadAndInit(IMAGES);
+// Start galerij
+if (Array.isArray(IMAGES) && IMAGES.length) {
+  preloadAndInit(IMAGES);
+} else if (galleryEmpty) {
+  galleryEmpty.classList.remove('hide');
+}
 
-
-// ---------- Video ----------
+// ===== Video =====
 const frame = document.getElementById('tourFrame');
 const videoWrap = document.getElementById('videoWrap');
 const videoEmpty = document.getElementById('videoEmpty');
-if (frame && videoWrap && videoEmpty) {
-if (VIDEO_URL) {
-  frame.src = VIDEO_URL;
-  videoEmpty.classList.add('hide');
-  videoWrap.classList.remove('hide');
-  // extra hard override
-  videoEmpty.style.display = 'none';
-  videoWrap.style.display = '';
-} else {
-  videoWrap.classList.add('hide');
-  videoEmpty.classList.remove('hide');
-  // extra hard override
-  videoWrap.style.display = 'none';
-  videoEmpty.style.display = '';
-}
- 
 
-// ---------- Tabs (details / documenten / biedingen) ----------
+if (frame && videoWrap && videoEmpty) {
+  if (typeof VIDEO_URL === 'string' && VIDEO_URL.trim()) {
+    frame.src = VIDEO_URL.trim();
+    videoEmpty.classList.add('hide');
+    videoWrap.classList.remove('hide');
+    videoEmpty.style.display = 'none';
+    videoWrap.style.display = '';
+  } else {
+    videoWrap.classList.add('hide');
+    videoEmpty.classList.remove('hide');
+    videoWrap.style.display = 'none';
+    videoEmpty.style.display = '';
+  }
+}
+
+// ===== Tabs (details / documenten / biedingen) =====
 (() => {
   const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
   const tabPanels  = Array.from(document.querySelectorAll('.tab-content'));
@@ -185,8 +205,7 @@ if (VIDEO_URL) {
   showTab('details');
 })();
 
-
-// ---------- Documenten ----------
+// ===== Documenten =====
 (() => {
   const docsList = document.getElementById('docsList');
   if (!docsList) return;
@@ -200,7 +219,7 @@ if (VIDEO_URL) {
   docsList.innerHTML = DOCUMENTS.map(d => `
     <div class="doc-row">
       <div>📄 ${d.name}</div>
-      <a class="btn" href="${d.url}" target="_blank" rel="noopener">Download</a>
+      <a class="btn" href="${toURL(d.url)}" target="_blank" rel="noopener">Download</a>
     </div>
   `).join('');
 })();
