@@ -62,3 +62,5 @@ body{background:var(--bg);color:var(--text);}
 .card,.content,.kv-item,.doc-row,.banner,.prose{overflow-wrap:anywhere;word-break:normal}
 .kv-item .value,.kv-item{white-space:normal}
 .prose li{margin:4px 0}
+/* alles met .hide verbergen */
+.hide { display: none !important; }
