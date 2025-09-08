@@ -39,8 +39,8 @@ const IMAGES = [
 const VIDEO_URL = "https://www.youtube.com/embed/830jJZiPLtY";
 
 const DOCUMENTS = [
-  // Voorbeeld:
-  // { name: 'EPC – Label B', url: 'documents/epc.pdf' },
+  { name: 'EPC', url: 'documents/EPC-berkenlaan-14-kessel.pdf' },
+  { name: 'Inplanning vaste trap', url: 'documents/inplanning-vaste-trap.pdf' },
 ];
 // === EINDE DATA ===
 
@@ -217,10 +217,18 @@ if (frame && videoWrap && videoEmpty) {
     return;
   }
 
-  docsList.innerHTML = DOCUMENTS.map(d => `
-    <div class="doc-row">
-      <div>📄 ${d.name}</div>
-      <a class="btn" href="${toURL(d.url)}" target="_blank" rel="noopener">Download</a>
+  docsList.innerHTML = `
+    <div class="btn-row">
+      ${DOCUMENTS.map(d => `
+        <a class="btn" href="${encodeURI(d.url)}" target="_blank" rel="noopener">${d.name}</a>
+      `).join('')}
     </div>
-  `).join('');
+  `;
 })();
+
+/* Extra styling voor de document-knoppen */
+.btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
