@@ -1,227 +1,256 @@
-// === JOUW DATA ===
-// Zet de .jpeg-bestanden in dezelfde map als index.html
-const IMAGES = [
-  "WhatsApp Image 2025-09-07 at 13.51.24.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.27.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.06.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.03.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.06 (1).jpeg",
-
-  "WhatsApp Image 2025-09-07 at 13.51.08.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.09.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.12.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.13 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.13.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.14.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.15.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.16 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.16.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.18.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.21.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.29.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.35.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.39.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.40.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.41 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.41.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.42 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.42.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.40.38.jpeg",
-
-  "WhatsApp Image 2025-09-07 at 13.52.26 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.52.26 (2).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.52.26.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.51 (1).jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.51.jpeg",
-  "WhatsApp Image 2025-09-07 at 13.51.50.jpeg"
-];
-
-const VIDEO_URL = "https://www.youtube.com/embed/830jJZiPLtY";
-
-const DOCUMENTS = [
-  { name: 'EPC', url: 'documents/EPC-berkenlaan-14-kessel.pdf' },
-  { name: 'Inplanning vaste trap', url: 'documents/inplanning-vaste-trap.pdf' },
-];
-// === EINDE DATA ===
-
-// ===== Helper: veilige URL voor bestandsnamen met spaties/() =====
-const toURL = (p) => encodeURI(p);
-
-// ===== Footer jaar =====
-document.addEventListener('DOMContentLoaded', () => {
-  const y = document.getElementById('year');
-  if (y) y.textContent = new Date().getFullYear();
-});
-
-// ===== Galerij als banner-slider =====
-const galleryHost = document.getElementById('gallery');
-const galleryEmpty = document.getElementById('gallery-empty');
-
-function renderBanner() {
-  if (galleryEmpty) galleryEmpty.classList.add('hide');
-  if (!galleryHost) return;
-  galleryHost.innerHTML = `
-    <div class="banner" id="banner">
-      <img id="bannerImg" alt="Foto" />
-      <button class="banner-btn prev" aria-label="Vorige">&#10094;</button>
-      <button class="banner-btn next" aria-label="Volgende">&#10095;</button>
-      <div class="banner-dots" id="bannerDots"></div>
-    </div>
-  `;
+/* ===== BASIS ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background: #fafafa;
+  color: #222;
+}
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+h1, h2, h3 {
+  margin-bottom: 8px;
+}
+p {
+  margin-bottom: 12px;
 }
 
-function preloadAndInit(list) {
-  if (!list || list.length === 0 || !galleryHost) {
-    if (galleryEmpty) galleryEmpty.classList.remove('hide');
-    return;
-  }
-  const valid = [];
-  let done = 0;
-
-  list.forEach(src => {
-    const im = new Image();
-    im.onload = () => { valid.push(src); finish(); };
-    im.onerror = finish; // sla kapotte items over
-    im.referrerPolicy = "no-referrer";
-    im.src = toURL(src);
-  });
-
-  function finish() {
-    done++;
-    if (done === list.length) {
-      if (!valid.length) {
-        if (galleryEmpty) galleryEmpty.classList.remove('hide');
-        return;
-      }
-      renderBanner();
-      initSlider(valid);
-    }
-  }
+/* ===== HEADER ===== */
+.header {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 12px 0;
+}
+.header .inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand .badge {
+  font-size: 28px;
+}
+.hero-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+.hero-sub {
+  color: #666;
+  font-size: 14px;
 }
 
-function initSlider(list) {
-  const imgEl = document.getElementById('bannerImg');
-  const dotsEl = document.getElementById('bannerDots');
-  const nextBtn = document.querySelector('.banner-btn.next');
-  const prevBtn = document.querySelector('.banner-btn.prev');
-
-  if (!imgEl || !dotsEl || !nextBtn || !prevBtn) return;
-
-  dotsEl.innerHTML = list.map((_, i) =>
-    `<button class="dot" data-i="${i}" aria-label="Slide ${i+1}"></button>`
-  ).join('');
-  const dotButtons = Array.from(dotsEl.querySelectorAll('.dot'));
-
-  let index = 0;
-  const INTERVAL_MS = 4000;
-  let timer = null;
-
-  function show(i, instant=false) {
-    index = (i + list.length) % list.length;
-    if (!instant) imgEl.classList.add('is-fading');
-    imgEl.onload = () => imgEl.classList.remove('is-fading');
-    imgEl.src = toURL(list[index]);
-    dotButtons.forEach((b, k) => b.classList.toggle('active', k === index));
-  }
-  function next(){ show(index + 1); }
-  function prev(){ show(index - 1); }
-  function start(){ stop(); timer = setInterval(next, INTERVAL_MS); }
-  function stop(){ if (timer) clearInterval(timer); timer = null; }
-
-  nextBtn.addEventListener('click', () => { next(); start(); });
-  prevBtn.addEventListener('click', () => { prev(); start(); });
-  dotButtons.forEach(b => b.addEventListener('click', (e) => {
-    const i = Number(e.currentTarget.getAttribute('data-i'));
-    show(i); start();
-  }));
-
-  // Lightbox
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
-  const lightboxClose = document.getElementById('lightboxClose');
-
-  if (lightbox && lightboxImg && lightboxClose) {
-    imgEl.style.cursor = 'zoom-in';
-    imgEl.addEventListener('click', () => {
-      lightboxImg.src = toURL(list[index]);
-      lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    });
-    lightboxClose.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
-      document.body.style.overflow = '';
-    });
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) lightboxClose.click();
-    });
-  }
-
-  show(0, true);
-  start();
+/* ===== KNOPPEN ===== */
+.btn {
+  background: #0077cc;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+.btn:hover {
+  background: #005fa3;
 }
 
-// Start galerij
-if (Array.isArray(IMAGES) && IMAGES.length) {
-  preloadAndInit(IMAGES);
-} else if (galleryEmpty) {
-  galleryEmpty.classList.remove('hide');
+/* ===== CARDS ===== */
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.card .content {
+  font-size: 15px;
 }
 
-// ===== Video =====
-const frame = document.getElementById('tourFrame');
-const videoWrap = document.getElementById('videoWrap');
-const videoEmpty = document.getElementById('videoEmpty');
-
-if (frame && videoWrap && videoEmpty) {
-  if (typeof VIDEO_URL === 'string' && VIDEO_URL.trim()) {
-    frame.src = VIDEO_URL.trim();
-    videoEmpty.classList.add('hide');
-    videoWrap.classList.remove('hide');
-    videoEmpty.style.display = 'none';
-    videoWrap.style.display = '';
-  } else {
-    videoWrap.classList.add('hide');
-    videoEmpty.classList.remove('hide');
-    videoWrap.style.display = 'none';
-    videoEmpty.style.display = '';
-  }
+/* ===== ROW LAYOUT ===== */
+.row {
+  display: flex;
+  gap: 16px;
+}
+.row .card {
+  flex: 1;
 }
 
-// ===== Tabs (details / documenten / biedingen) =====
-(() => {
-  const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
-  const tabPanels  = Array.from(document.querySelectorAll('.tab-content'));
+/* ===== KV (kenmerken) ===== */
+.kv {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.kv-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.kv-item .label {
+  font-size: 12px;
+  color: #666;
+}
+.kv-item .value {
+  font-weight: bold;
+}
 
-  function showTab(name) {
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-    tabPanels.forEach(p => {
-      const isTarget = p.id === `tab-${name}`;
-      p.style.display = isTarget ? '' : 'none';
-      p.classList.toggle('hide', !isTarget);
-    });
-  }
+/* ===== NOTICE ===== */
+.notice {
+  background: #f0f8ff;
+  padding: 12px;
+  border-left: 4px solid #0077cc;
+  border-radius: 4px;
+  font-size: 14px;
+}
 
-  tabButtons.forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.tab)));
-  showTab('details');
-})();
+/* ===== TABS ===== */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  background: #f9f9f9;
+  cursor: pointer;
+  border-radius: 4px 4px 0 0;
+}
+.tab-btn.active {
+  background: #fff;
+  font-weight: bold;
+}
+.tab-content {
+  border: 1px solid #ddd;
+  border-radius: 0 4px 4px 4px;
+  padding: 16px;
+  background: #fff;
+}
 
-// ===== Documenten =====
-(() => {
-  const docsList = document.getElementById('docsList');
-  if (!docsList) return;
+/* ===== DOCUMENTEN-KNOPEN ===== */
+.btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 
-  if (!Array.isArray(DOCUMENTS) || DOCUMENTS.length === 0) {
-    docsList.innerHTML =
-      '<div class="placeholder">Nog geen documenten toegevoegd. Voeg items toe in <code>scripts.js</code> → <b>DOCUMENTS</b>.</div>';
-    return;
-  }
+/* ===== GALLERIJ / BANNER ===== */
+.banner {
+  position: relative;
+  max-height: 500px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+.banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.6s;
+}
+.banner img.is-fading {
+  opacity: 0.4;
+}
+.banner-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 18px;
+}
+.banner-btn.prev { left: 10px; }
+.banner-btn.next { right: 10px; }
+.banner-dots {
+  text-align: center;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+}
+.banner-dots .dot {
+  background: #bbb;
+  border: none;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin: 0 3px;
+  display: inline-block;
+  cursor: pointer;
+}
+.banner-dots .dot.active {
+  background: #0077cc;
+}
 
-  docsList.innerHTML = `
-    <div class="btn-row">
-      ${DOCUMENTS.map(d => `
-        <a class="btn" href="${encodeURI(d.url)}" target="_blank" rel="noopener">${d.name}</a>
-      `).join('')}
-    </div>
-  `;
-})();
+/* ===== LIGHTBOX ===== */
+.lightbox {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.lightbox.active {
+  display: flex;
+}
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 6px;
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px; right: 30px;
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ===== PLACEHOLDER ===== */
+.placeholder {
+  padding: 16px;
+  background: #f9f9f9;
+  color: #666;
+  font-size: 14px;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+.hide {
+  display: none;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  margin-top: 24px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  padding: 12px 0;
+  font-size: 13px;
+  color: #666;
+}
+.footer .inner {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
