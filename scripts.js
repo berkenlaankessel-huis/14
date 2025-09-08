@@ -218,17 +218,42 @@ if (VIDEO_URL) {
   showTab('details');
 })();
 
-
-
 // ---------- Documenten ----------
-const docsList = document.getElementById('docsList');
-if (DOCUMENTS.length === 0) {
-  docsList.innerHTML = '<div class="placeholder">Nog geen documenten toegevoegd. Voeg items toe in <code>scripts.js</code> → <b>DOCUMENTS</b>.</div>';
-} else {
+(() => {
+  const docsList = document.getElementById('docsList');
+  if (!docsList) return; // paneel bestaat (nog) niet
+
+  if (!Array.isArray(DOCUMENTS) || DOCUMENTS.length === 0) {
+    docsList.innerHTML =
+      '<div class="placeholder">Nog geen documenten toegevoegd. Voeg items toe in <code>scripts.js</code> → <b>DOCUMENTS</b>.</div>';
+    return;
+  }
+
   docsList.innerHTML = DOCUMENTS.map(d => `
     <div class="doc-row">
       <div>📄 ${d.name}</div>
-      <a class="btn" href="${d.url}" download>Download</a>
+      <a class="btn" href="${d.url}" target="_blank" rel="noopener">Download</a>
     </div>
   `).join('');
+})();
+
+/* Tabs mogen aflopen op kleinere schermen */
+.tabs{ display:flex; gap:8px; flex-wrap:wrap; }
+.tab-btn{ flex:1 1 auto; max-width:100%; }
+
+/* Tekst netjes laten teruglopen in kaartjes/rijtjes */
+.card, .content, .kv-item, .doc-row, .banner, .prose {
+  overflow-wrap:anywhere;
+  word-break:normal;
 }
+
+/* Waardes in kleine badges/chips mogen afbreken i.p.v. uit het vak lopen */
+.kv-item .value, .kv-item { white-space:normal; }
+
+/* Zorg dat lijst-items niet buiten de kaart schieten */
+.prose li { margin:0.25rem 0; }
+
+/* Header e-mail knop netjes rechts zonder uitrekken */
+.actions { display:flex; align-items:center; gap:8px; }
+
+
